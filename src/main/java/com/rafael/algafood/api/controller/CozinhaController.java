@@ -1,6 +1,5 @@
 package com.rafael.algafood.api.controller;
 
-import com.rafael.algafood.api.model.CozinhasXmlWrapper;
 import com.rafael.algafood.domain.exception.EntidadeEmUsoException;
 import com.rafael.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.rafael.algafood.domain.model.Cozinha;
@@ -8,10 +7,7 @@ import com.rafael.algafood.domain.repository.CozinhaRepository;
 import com.rafael.algafood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +26,6 @@ public class CozinhaController {
     @GetMapping
     public List<Cozinha> listar() {
         return cozinhaRepository.listar();
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public CozinhasXmlWrapper listarXml() {
-        return new CozinhasXmlWrapper(cozinhaRepository.listar());
     }
 
     @GetMapping("/{cozinhaId}")
@@ -61,7 +52,7 @@ public class CozinhaController {
         if (cozinhaAtual != null) {
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-            cozinhaAtual = cozinhaRepository.salvar(cozinhaAtual);
+            cozinhaAtual = cadastroCozinhaService.salvar(cozinhaAtual);
             return ResponseEntity.ok(cozinhaAtual);
         }
 
